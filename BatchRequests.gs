@@ -2,20 +2,20 @@
 
 class BatchRequest {
   constructor(obj) {
-    if (!obj.hasOwnProperty('requests')) {
+    if (!obj.hasOwnProperty("requests")) {
       throw new Error("'requests' property was not found in object.");
     }
 
     this.reqs = obj.requests.slice();
-    this.url = 'https://www.googleapis.com/batch';
+    this.url = "https://www.googleapis.com/batch";
 
     if (obj.batchPath) {
       const batchPath = obj.batchPath.trim();
 
-      if (~batchPath.indexOf('batch/')) {
-        this.url += batchPath.replace('batch', '');
+      if (~batchPath.indexOf("batch/")) {
+        this.url += batchPath.replace("batch", "");
       } else {
-        this.url += batchPath.slice(0, 1) === '/' ? batchPath : `/${batchPath}`;
+        this.url += batchPath.slice(0, 1) === "/" ? batchPath : `/${batchPath}`;
       }
     }
 
@@ -35,7 +35,7 @@ class BatchRequest {
     const limit = 100;
     const split = Math.ceil(this.reqs.length / limit);
 
-    if (typeof UrlFetchApp.fetchAll === 'function') {
+    if (typeof UrlFetchApp.fetchAll === "function") {
       const reqs = [];
       var i = 0;
       var j = 0;
@@ -80,7 +80,7 @@ class BatchRequest {
 
   parser(contentText) {
     const regex = /{[\S\s]+}/g;
-    var temp = contentText.split('--batch');
+    var temp = contentText.split("--batch");
 
     return temp.slice(1, temp.length - 1).map((e) => {
       if (regex.test(e)) {
@@ -91,7 +91,7 @@ class BatchRequest {
   }
 
   createRequest(requests) {
-    const boundary = 'xxxxxxxxxx';
+    const boundary = "xxxxxxxxxx";
 
     var contentId = 0;
     var data = `--${boundary}\r\n`;
@@ -110,7 +110,7 @@ class BatchRequest {
           `Content-Type: application/json; charset=utf-8\r\n\r\n` +
           `${JSON.stringify(req.requestBody)}\r\n`;
       } else {
-        data += '\r\n';
+        data += "\r\n";
       }
 
       data += `--${boundary}\r\n`;
@@ -120,7 +120,7 @@ class BatchRequest {
 
     return {
       muteHttpExceptions: true,
-      method: 'post',
+      method: "post",
       contentType: `multipart/mixed; boundary=${boundary}`,
       payload: Utilities.newBlob(data).getBytes(),
       headers: {
