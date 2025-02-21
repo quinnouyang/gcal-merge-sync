@@ -19,11 +19,13 @@ class BatchRequest {
       }
     }
 
+    // @ts-ignore
     this.accessToken = obj.accessToken || ScriptApp.getOAuthToken();
 
     if (obj.useFetchAll === true || this.reqs.length > 1) {
       return this.enhancedDo();
     } else {
+      // @ts-ignore
       let res = UrlFetchApp.fetch(this.url, this.createRequest(this.reqs));
 
       res = this.parser(res.getContentText());
@@ -35,6 +37,7 @@ class BatchRequest {
     const limit = 100;
     const split = Math.ceil(this.reqs.length / limit);
 
+    // @ts-ignore
     if (typeof UrlFetchApp.fetchAll === "function") {
       const reqs = [];
       var i = 0;
@@ -46,6 +49,7 @@ class BatchRequest {
         reqs.push(params);
       }
 
+      // @ts-ignore
       const res = UrlFetchApp.fetchAll(reqs).reduce((array, item) => {
         if (item.getResponseCode() !== 200) {
           array.push(item.getContentText());
@@ -64,6 +68,7 @@ class BatchRequest {
     for (; 0 <= split ? k < split : k > split; i = 0 <= split ? ++k : --k) {
       const params = this.createRequest(this.reqs.splice(0, limit));
 
+      // @ts-ignore
       const response = UrlFetchApp.fetch(this.url, params);
 
       if (response.getResponseCode() !== 200) {
@@ -122,6 +127,7 @@ class BatchRequest {
       muteHttpExceptions: true,
       method: "post",
       contentType: `multipart/mixed; boundary=${boundary}`,
+      // @ts-ignore
       payload: Utilities.newBlob(data).getBytes(),
       headers: {
         Authorization: `Bearer ${this.accessToken}`,
