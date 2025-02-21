@@ -137,6 +137,7 @@ function createEvents(startTime, endTime) {
           start: event.start,
           end: event.end,
           conferenceData: event.conferenceData,
+          color: 
         },
       });
     });
