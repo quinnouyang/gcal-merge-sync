@@ -41,7 +41,6 @@ function SyncCalendarsIntoOne() {
 
   // Delete any old events that have been already cloned over.
   const deleteStartTime = new Date();
-  // @ts-ignore
   deleteStartTime.setFullYear(2000, 01, 01);
   deleteStartTime.setHours(0, 0, 0, 0);
 
@@ -52,16 +51,15 @@ function SyncCalendarsIntoOne() {
 // Delete any old events that have been already cloned over.
 // This is basically a sync w/o finding and updating. Just deleted and recreate.
 function deleteEvents(startTime, endTime) {
-  // @ts-ignore
   const sharedCalendar = CalendarApp.getCalendarById(CALENDAR_TO_MERGE_INTO);
 
   // Find events with the search character in the title.
   // The `.filter` method is used since the getEvents method seems to return all events at the moment. It's a safety check.
-  const events = sharedCalendar
-    .getEvents(startTime, endTime, { search: SEARCH_CHARACTER })
-    .filter((event) => event.getTitle().includes(SEARCH_CHARACTER));
+  const events = sharedCalendar.getEvents(startTime, endTime, {
+    search: SEARCH_CHARACTER,
+  });
+  // .filter((event) => event.getTitle().includes(SEARCH_CHARACTER))
 
-  // @ts-ignore
   const requestBody = events.map((e, i) => ({
     method: "DELETE",
     endpoint: `${ENDPOINT_BASE}/${CALENDAR_TO_MERGE_INTO}/events/${e
@@ -70,7 +68,6 @@ function deleteEvents(startTime, endTime) {
   }));
 
   if (requestBody && requestBody.length) {
-    // @ts-ignore
     const result = new BatchRequest({
       useFetchAll: true,
       batchPath: "batch/calendar/v3",
@@ -94,7 +91,6 @@ function createEvents(startTime, endTime) {
 
   for (let calendarName in CALENDARS_TO_MERGE) {
     const calendarId = CALENDARS_TO_MERGE[calendarName];
-    // @ts-ignore
     const calendarToCopy = CalendarApp.getCalendarById(calendarId);
 
     if (!calendarToCopy) {
@@ -103,7 +99,6 @@ function createEvents(startTime, endTime) {
     }
 
     // Find events
-    // @ts-ignore
     const events = Calendar.Events.list(calendarId, {
       timeMin: startTime.toISOString(),
       timeMax: endTime.toISOString(),
@@ -137,14 +132,12 @@ function createEvents(startTime, endTime) {
           start: event.start,
           end: event.end,
           conferenceData: event.conferenceData,
-          color: 
         },
       });
     });
   }
 
   if (requestBody && requestBody.length) {
-    // @ts-ignore
     const result = new BatchRequest({
       batchPath: "batch/calendar/v3",
       requests: requestBody,
