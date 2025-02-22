@@ -50,7 +50,7 @@ function SyncCalendarsIntoOne() {
 
 // Delete any old events that have been already cloned over.
 // This is basically a sync w/o finding and updating. Just deleted and recreate.
-function deleteEvents(startTime, endTime) {
+function deleteEvents(startTime: Date, endTime: Date) {
   const sharedCalendar = CalendarApp.getCalendarById(CALENDAR_TO_MERGE_INTO);
 
   // Find events with the search character in the title.

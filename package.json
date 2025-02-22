@@ -4,13 +4,24 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build-clean": "rm -ir build && mkdir build && pnpm config && pnpm build && pnpm postbuild",
+    "build": "tsc --build src",
+    "format": "prettier --write **.{ts,json}",
+    "lint": "pnpm dlx eslint",
+    "config": "cp src/appsscript.json build",
+    "push": "cd src/Gas && clasp push"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "packageManager": "pnpm@10.4.1",
   "devDependencies": {
-    "@google/clasp": "^2.5.0"
+    "@eslint/js": "^9.21.0",
+    "@google/clasp": "^2.5.0",
+    "@types/google-apps-script": "^1.0.96",
+    "eslint": "^9.21.0",
+    "prettier": "^3.5.2",
+    "typescript": "^5.7.3",
+    "typescript-eslint": "^8.24.1"
   }
 }
